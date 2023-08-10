@@ -172,6 +172,34 @@ app.get('/ow-media', async (req, res) => {
   }
 });
 
+app.get('/battlepass', async (req, res) => {
+  try {
+    const url = 'https://overwatch.blizzard.com/en-us/season/';
+    const response = await axios.get(url);
+    const $ = cheerio.load(response.data);
+
+    const freeBattlePassItems = $('blz-card[blz-modal-trigger="platform-selection-1"] div[slot="description"] li');
+    const freeBattlePass = freeBattlePassItems.map((index, item) => $(item).text()).get();
+
+    const premiumBattlePassItems = $('blz-card[blz-modal-trigger="battle-pass-modal-1"] div[slot="description"] li');
+    const premiumBattlePass = premiumBattlePassItems.map((index, item) => $(item).text()).get();
+
+    const seasonHeader = {
+      heading: $('blz-header[slot="header"] h1').text()
+    };
+
+    const seasonData = {
+      seasonHeader,
+      freeBattlePass,
+      premiumBattlePass,
+    };
+
+    res.json(seasonData);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while scraping season info.' });
+  }
+});
+
 app.listen(port, () => {
   console.log(`owinsights is running on port ${port}`);
 });
