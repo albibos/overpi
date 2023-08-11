@@ -2,7 +2,7 @@ const heroesGrid = document.getElementById("heroesGrid");
 
 async function fetchHeroes() {
   try {
-    const response = await fetch("https://overpi.albinus.gay/heroes");
+    const response = await fetch("https://overpi.albinus.gay/api/heroes");
     const data = await response.json();
     return data;
   } catch (error) {
@@ -15,13 +15,13 @@ function createHeroElement(hero) {
   heroElement.classList.add("hero-card");
 
   const img = document.createElement("img");
-  img.src = hero.portrait;
-  img.alt = hero.name;
+  img.src = hero.heroImage;
+  img.alt = hero.heroName;
   img.classList.add("hero-image");
   heroElement.appendChild(img);
 
   const name = document.createElement("div");
-  name.textContent = hero.name;
+  name.textContent = hero.heroName;
   name.classList.add("hero-name");
   heroElement.appendChild(name);
 
@@ -33,8 +33,8 @@ function createHeroElement(hero) {
   heroElement.setAttribute("data-hero-key", hero.key);
 
   heroElement.addEventListener("click", () => {
-    const heroKey = hero.key;
-    window.location.href = `/hero?name=${heroKey}`;
+    const heroKey = hero.heroKey;
+    window.location.href = `/api/hero?name=${heroKey}`;
 });
 
   return heroElement;

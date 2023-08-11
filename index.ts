@@ -12,18 +12,40 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cors());
 
-app.get('/heroes', async (req, res) => {
-  const { role } = req.query;
-
+app.get('/api/heroes/:query?', async (req, res) => {
   try {
-    const heroes = await Overwatch.heroes({ role });
-    res.json(heroes);
+    const url = 'https://overwatch.blizzard.com/en-us/heroes/';
+    const response = await axios.get(url);
+    const $ = cheerio.load(response.data);
+
+    const query = req.params.query;
+
+    const heroCards = $('.heroCard');
+
+    const heroes = heroCards.map((index, card) => {
+      const role = $(card).attr('data-role');
+      const heroName = $(card).attr('hero-name');
+      const heroKey = $(card).attr('data-hero-id');
+      const heroImage = $(card).find('.heroCardPortrait').attr('src');
+
+      if (!query || role === query) {
+        return {
+          heroName,
+          role,
+          heroKey,
+          heroImage,
+        };
+      }
+      return null;
+    }).get();
+
+    res.json(heroes.filter(hero => hero !== null));
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while fetching heroes' });
+    res.status(500).json({ error: 'An error occurred while scraping hero information.' });
   }
 });
 
-app.get('/hero', async (req, res) => {
+app.get('/api/hero', async (req, res) => {
   const { name } = req.query;
 
   if (!name) {
@@ -43,7 +65,7 @@ app.get('/hero', async (req, res) => {
   }
 });
 
-app.get('/search-players', async (req, res) => {
+app.get('/api/search-players', async (req, res) => {
   const { name } = req.query;
 
   if (!name) {
@@ -73,7 +95,7 @@ app.get('/player-summary', async (req, res) => {
   }
 });
 
-app.get('/hero-updates', async (req, res) => {
+app.get('/api/hero-updates', async (req, res) => {
   try {
     const url = 'https://overwatch.blizzard.com/en-us/news/patch-notes/';
     const response = await axios.get(url);
@@ -107,7 +129,7 @@ app.get('/hero-updates', async (req, res) => {
   }
 });
 
-app.get('/bug-fixes', async (req, res) => {
+app.get('/api/bug-fixes', async (req, res) => {
   try {
     const url = 'https://overwatch.blizzard.com/en-us/news/patch-notes/';
     const response = await axios.get(url);
@@ -145,7 +167,7 @@ app.get('/bug-fixes', async (req, res) => {
   }
 });
 
-app.get('/ow-media', async (req, res) => {
+app.get('/api/ow-media', async (req, res) => {
   try {
     const response = await axios.get('https://overwatch.blizzard.com/en-us/media/screenshots/');
     const html = response.data;
@@ -172,7 +194,7 @@ app.get('/ow-media', async (req, res) => {
   }
 });
 
-app.get('/battlepass', async (req, res) => {
+app.get('/api/battlepass', async (req, res) => {
   try {
     const url = 'https://overwatch.blizzard.com/en-us/season/';
     const response = await axios.get(url);
@@ -199,6 +221,174 @@ app.get('/battlepass', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while scraping season info.' });
   }
 });
+
+app.get('/api/blogs/:id', async (req, res) => {
+  try {
+    const blogId = req.params.id;
+    const url = `https://overwatch.blizzard.com/en-us/news/${blogId}/`;
+    const response = await axios.get(url);
+    const $ = cheerio.load(response.data);
+
+    const blogTitle = $('.blog-details .blog-title').text();
+    const authorName = $('.blog-details .author-name').text();
+    const publishDate = $('.blog-details .publish-date').text();
+    const blogImage = $('.blog-details .blog-header-image img').attr('src');
+    const blogContent = $('.blog-details .blog-detail').text();
+
+    const blogDetails = {
+      blogTitle,
+      authorName,
+      publishDate,
+      blogImage,
+      blogContent,
+    };
+
+    res.json(blogDetails);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while scraping blog details.' });
+  }
+});
+
+app.get('/api/highlights', async (req, res) => {
+  try {
+    const url = 'https://overwatch.blizzard.com/en-us/season/';
+    const response = await axios.get(url);
+    const $ = cheerio.load(response.data);
+
+    const highlightCards = $('blz-card[variant="simple-large"]');
+
+    const highlights = highlightCards.map((index, card) => {
+      const imageSrc = $(card).find('blz-image').attr('src');
+      const availability = $(card).find('h5[slot="subheading"]').text();
+      const heading = $(card).find('h4[slot="heading"]').text();
+      const description = $(card).find('div[slot="description"] > p').text();
+
+      return {
+        imageSrc,
+        availability,
+        heading,
+        description,
+      };
+    }).get();
+
+    res.json(highlights);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while scraping highlights' });
+  }
+});
+
+// soon!!!!
+
+app.get('/api/shop', async (req, res) => {
+  try {
+    const url = 'https://us.shop.battle.net/en-us/family/overwatch';
+    const response = await axios.get(url);
+    const html = response.data;
+    
+    const shopItems: ShopItem[] = []; 
+    
+    const $ = cheerio.load(html);
+    $('.browsing-card').each((index, element) => {
+      const image = $(element).find('img').attr('src');
+      const highlight = $(element).find('.meka-browsing-card__details__highlight').text();
+      const header = $(element).find('h3').text();
+      const price = $(element).find('.price').text();
+
+      shopItems.push({ image, highlight, header, price });
+    });
+
+    res.json({ shopItems });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while scraping shop data' });
+  }
+});
+
+app.get('/forums/top', async (req, res) => {
+  try {
+    const url = 'https://us.forums.blizzard.com/en/overwatch/top';
+    const response = await axios.get(url);
+    const html = response.data;
+
+    const forumPosts = [];
+
+    const $ = cheerio.load(html);
+    const topicRows = $('.topic-list-item');
+    
+    topicRows.each((index, element) => {
+      const topicId = $(element).attr('data-topic-id');
+      const title = $(element).find('.title').text().trim();
+a
+      const authorElement = $(element).find('.creator a');
+      const author = authorElement.text().trim();
+      const authorProfileUrl = authorElement.attr('href');
+
+      const categoryName = $(element).find('.category-name').text().trim();
+
+      forumPosts.push({ topicId, title, authorProfileUrl, categoryName });
+    });
+
+    res.json({ forumPosts });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while scraping forum data' });
+  }
+});
+
+app.get('/forums/latest', async (req, res) => {
+  try {
+    const url = 'https://us.forums.blizzard.com/en/overwatch/latest';
+    const response = await axios.get(url);
+    const html = response.data;
+
+    const latestPosts = [];
+
+    const $ = cheerio.load(html);
+    $('.topic-list-item').each((index, element) => {
+      const topicId = $(element).attr('data-topic-id');
+      const title = $(element).find('.title').text().trim();
+
+      const authorElement = $(element).find('.creator a');
+      const author = authorElement.text().trim();
+      const authorProfileUrl = authorElement.attr('href');
+
+      const categoryName = $(element).find('.category-name').text().trim();
+
+      latestPosts.push({ topicId, title, author, authorProfileUrl, categoryName });
+    });
+
+    res.json({ latestPosts });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while scraping forum data' });
+  }
+});
+
+app.get('/forums/bug-reports/posts', async (req, res) => {
+  try {
+    const url = 'https://us.forums.blizzard.com/en/overwatch/c/bug-reports/9';
+    const response = await axios.get(url);
+    const html = response.data;
+
+    const latestPosts = [];
+
+    const $ = cheerio.load(html);
+    $('.topic-list-item').each((index, element) => {
+      const topicId = $(element).attr('data-topic-id');
+      const title = $(element).find('.title').text().trim();
+
+      const authorElement = $(element).find('.creator a');
+      const author = authorElement.text().trim();
+      const authorProfileUrl = authorElement.attr('href');
+
+      const categoryName = $(element).find('.category-name').text().trim();
+
+      latestPosts.push({ topicId, title });
+    });
+
+    res.json({ latestPosts });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while scraping forum data' });
+  }
+});
+
 
 app.listen(port, () => {
   console.log(`owinsights is running on port ${port}`);
