@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cors());
 
-app.get('/api/heroes/:query?', async (req, res) => {
+app.get('/heroes/:query?', async (req, res) => {
   try {
     const url = 'https://overwatch.blizzard.com/en-us/heroes/';
     const response = await axios.get(url);
@@ -45,15 +45,15 @@ app.get('/api/heroes/:query?', async (req, res) => {
   }
 });
 
-app.get('/api/hero', async (req, res) => {
-  const { name } = req.query;
+app.get('/hero', async (req, res) => {
+  const { n } = req.query;
 
-  if (!name) {
+  if (!n) {
     return res.status(400).json({ error: 'Hero name is required' });
   }
 
   try {
-    const hero = await Overwatch.hero(name.toString()).catch(() => null);
+    const hero = await Overwatch.hero(n.toString()).catch(() => null);
 
     if (!hero) {
       return res.status(404).json({ error: 'Hero not found' });
@@ -65,37 +65,37 @@ app.get('/api/hero', async (req, res) => {
   }
 });
 
-app.get('/api/search-players', async (req, res) => {
-  const { name } = req.query;
+app.get('/player/search', async (req, res) => {
+  const { n } = req.query;
 
-  if (!name) {
+  if (!n) {
     return res.status(400).json({ error: 'Player name is required' });
   }
 
   try {
-    const playerSearchResult = await Overwatch.searchPlayers({ name: name.toString() });
+    const playerSearchResult = await Overwatch.searchPlayers({ name: n.toString() });
     res.json(playerSearchResult);
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while searching for players' });
   }
 });
 
-app.get('/player-summary', async (req, res) => {
-  const { battletag } = req.query;
+app.get('/player/summary', async (req, res) => {
+  const { b } = req.query;
 
-  if (!battletag) {
+  if (!b) {
     return res.status(400).json({ error: 'Battletag is required' });
   }
 
   try {
-    const playerSummary = await Overwatch.player(battletag.toString()).summary;
+    const playerSummary = await Overwatch.player(b.toString()).summary;
     res.json(playerSummary);
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while fetching player summary' });
   }
 });
 
-app.get('/api/hero-updates', async (req, res) => {
+app.get('/hero-updates', async (req, res) => {
   try {
     const url = 'https://overwatch.blizzard.com/en-us/news/patch-notes/';
     const response = await axios.get(url);
@@ -129,7 +129,7 @@ app.get('/api/hero-updates', async (req, res) => {
   }
 });
 
-app.get('/api/bug-fixes', async (req, res) => {
+app.get('/bug-fixes', async (req, res) => {
   try {
     const url = 'https://overwatch.blizzard.com/en-us/news/patch-notes/';
     const response = await axios.get(url);
@@ -167,7 +167,7 @@ app.get('/api/bug-fixes', async (req, res) => {
   }
 });
 
-app.get('/api/ow-media', async (req, res) => {
+app.get('/media/screenshots', async (req, res) => {
   try {
     const response = await axios.get('https://overwatch.blizzard.com/en-us/media/screenshots/');
     const html = response.data;
@@ -194,7 +194,34 @@ app.get('/api/ow-media', async (req, res) => {
   }
 });
 
-app.get('/api/battlepass', async (req, res) => {
+app.get('/media/artworks', async (req, res) => {
+  try {
+    const response = await axios.get('https://overwatch.blizzard.com/en-us/media/artworks/');
+    const html = response.data;
+    const $ = cheerio.load(html);
+
+    const scrapedData: { [title: string]: string[] } = {};
+
+    $('.MediaItem a[data-glightbox]').each((index, element) => {
+      const title = $(element).attr('data-glightbox').split('title: ')[1];
+      const imgUrl = $(element).attr('href');
+
+      if (title && imgUrl) {
+        if (!scrapedData[title]) {
+          scrapedData[title] = [];
+        }
+        scrapedData[title].push(imgUrl);
+      }
+    });
+
+    res.json(scrapedData);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).send('An error occurred while scraping the data.');
+  }
+});
+
+app.get('/battlepass', async (req, res) => {
   try {
     const url = 'https://overwatch.blizzard.com/en-us/season/';
     const response = await axios.get(url);
@@ -222,7 +249,7 @@ app.get('/api/battlepass', async (req, res) => {
   }
 });
 
-app.get('/api/blogs/:id', async (req, res) => {
+app.get('/blogs/:id', async (req, res) => {
   try {
     const blogId = req.params.id;
     const url = `https://overwatch.blizzard.com/en-us/news/${blogId}/`;
@@ -249,7 +276,7 @@ app.get('/api/blogs/:id', async (req, res) => {
   }
 });
 
-app.get('/api/highlights', async (req, res) => {
+app.get('/highlights', async (req, res) => {
   try {
     const url = 'https://overwatch.blizzard.com/en-us/season/';
     const response = await axios.get(url);
@@ -277,31 +304,9 @@ app.get('/api/highlights', async (req, res) => {
   }
 });
 
-// soon!!!!
+// start of less useful stuff
 
-app.get('/api/shop', async (req, res) => {
-  try {
-    const url = 'https://us.shop.battle.net/en-us/family/overwatch';
-    const response = await axios.get(url);
-    const html = response.data;
-    
-    const shopItems: ShopItem[] = []; 
-    
-    const $ = cheerio.load(html);
-    $('.browsing-card').each((index, element) => {
-      const image = $(element).find('img').attr('src');
-      const highlight = $(element).find('.meka-browsing-card__details__highlight').text();
-      const header = $(element).find('h3').text();
-      const price = $(element).find('.price').text();
-
-      shopItems.push({ image, highlight, header, price });
-    });
-
-    res.json({ shopItems });
-  } catch (error) {
-    res.status(500).json({ error: 'An error occurred while scraping shop data' });
-  }
-});
+// i dont know what anyone would need to scrape blizzard forums for.. but i was bored
 
 app.get('/forums/top', async (req, res) => {
   try {
@@ -309,25 +314,23 @@ app.get('/forums/top', async (req, res) => {
     const response = await axios.get(url);
     const html = response.data;
 
-    const forumPosts = [];
+    const topPosts = [];
 
     const $ = cheerio.load(html);
-    const topicRows = $('.topic-list-item');
-    
-    topicRows.each((index, element) => {
+    $('.topic-list-item').each((index, element) => {
       const topicId = $(element).attr('data-topic-id');
       const title = $(element).find('.title').text().trim();
-a
+
       const authorElement = $(element).find('.creator a');
       const author = authorElement.text().trim();
       const authorProfileUrl = authorElement.attr('href');
 
       const categoryName = $(element).find('.category-name').text().trim();
 
-      forumPosts.push({ topicId, title, authorProfileUrl, categoryName });
+      latestPosts.push({ topicId, title, author, authorProfileUrl, categoryName });
     });
 
-    res.json({ forumPosts });
+    res.json({ topPosts });
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while scraping forum data' });
   }
@@ -361,7 +364,7 @@ app.get('/forums/latest', async (req, res) => {
   }
 });
 
-app.get('/forums/bug-reports/posts', async (req, res) => {
+app.get('/forums/bug-reports/', async (req, res) => {
   try {
     const url = 'https://us.forums.blizzard.com/en/overwatch/c/bug-reports/9';
     const response = await axios.get(url);
