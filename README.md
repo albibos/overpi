@@ -248,5 +248,6 @@ returns an array of data for the free and premium battlepass:
 }
 ```
 
+### a lot more coming soon just pumping as much out as possible right now
 
   
