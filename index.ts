@@ -129,7 +129,7 @@ app.get('/hero-updates', async (req, res) => {
   }
 });
 
-app.get('/bug-fixes', async (req, res) => {
+app.get('/general-updates', async (req, res) => {
   try {
     const url = 'https://overwatch.blizzard.com/en-us/news/patch-notes/';
     const response = await axios.get(url);
