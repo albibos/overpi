@@ -34,7 +34,7 @@ can be used with a query to sort heroes by role, like `/heroes/tank` or `/heroes
 returns data for a specific hero (there is a lot of data, like data on all abilities and the complete story of the hero, so i have to shorten it):
 
 ```json
-https://overpi.albinus.gay/hero?n=ana
+// https://overpi.albinus.gay/hero?n=ana
 {
   "name": "Ana",
   "description": "One of the founding members of Overwatch, Ana uses her skills and expertise to defend her home and the people she cares for.",
@@ -47,7 +47,7 @@ https://overpi.albinus.gay/hero?n=ana
     "armor": 0,
     "total": 200
   },
-  ...
+  // ...
   ```
 
 ### player search
@@ -56,7 +56,7 @@ https://overpi.albinus.gay/hero?n=ana
 
 returns an array of player profile data based on the query (currently uses overfast, gonna scrape the data myself soon!):
 ```json
-https://overpi.albinus.gay/player/search?n=adventurer
+// https://overpi.albinus.gay/player/search?n=adventurer
 {
   "total": 1900,
   "results": [
@@ -78,7 +78,7 @@ https://overpi.albinus.gay/player/search?n=adventurer
       "privacy": "private",
       "career_url": "https://overfast-api.tekrop.fr/players/Adventurer-110229487"
     },
-  ...
+  // ...
   ```
 
 ### player profile summary
@@ -87,7 +87,7 @@ https://overpi.albinus.gay/player/search?n=adventurer
 
   returns an array of a player profile summary:
   ```json
-  https://overpi.albinus.gay/player/summary?b=AdVentureR-2195
+  // https://overpi.albinus.gay/player/summary?b=AdVentureR-2195
   {
   "username": "AdVentureR",
   "avatar": "https://d15f34w2p8l1cc.cloudfront.net/overwatch/21b9e01301442344ccf132814d3e07d3e5e84d55f7f36e5bdf53dea4a004e7f0.png",
@@ -97,7 +97,7 @@ https://overpi.albinus.gay/player/search?n=adventurer
     "level": 3,
     "frame": "https://static.playoverwatch.com/img/pages/career/icons/endorsement/3-8ccb5f0aef.svg#icon"
   },
-...
+// ...
 ```
 
 ### hero patch notes
@@ -143,7 +143,7 @@ returns an array of all hero patch notes:
       }
     ]
   },
-...
+// ...
 ```
 
 ### bug fix patch notes
@@ -176,7 +176,7 @@ returns an array of all bug fix patch notes:
           "Paraíso -- Evening (New)"
         ]
       },
-...
+// ...
 ```
 
 ### overwatch screenshots
@@ -197,7 +197,7 @@ returns an array of screenshots of heroes and maps:
     "https://images.blz-contentstack.com/v3/assets/blt2477dcaf4ebd440c/bltc747346156082d56/5e6fc2cf8902221b5e1ddd8f/echo-screenshot-002.jpg?auto=webp",
     "https://images.blz-contentstack.com/v3/assets/blt2477dcaf4ebd440c/bltd1e880b7590f9688/5e6fc2cf297b4d1b5ff03091/echo-screenshot-003.jpg?auto=webp"
   ],
-...
+// ...
 ```
 
 ### hero artworks
@@ -213,7 +213,7 @@ returns an array of hero artworks and concept arts:
   "Sigma": [
     "https://images.blz-contentstack.com/v3/assets/blt2477dcaf4ebd440c/blt65e3918120aa6440/5d5ec75fa909ec1ccfcfa73c/sigma-concept.jpg?auto=webp"
   ],
- ...
+ // ...
 ```
 
 ### battlepass
