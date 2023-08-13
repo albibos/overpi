@@ -50,6 +50,42 @@ returns data for a specific hero (there is a lot of data, like data on all abili
   // ...
   ```
 
+### gamemodes
+
+```https://overpi.albinus.gay/gamemodes```
+
+```json
+[
+  {
+    "key": "push",
+    "name": "Push",
+    "icon": "https://blz-contentstack-images.akamaized.net/v3/assets/blt9c12f249ac15c7ec/blt054b513cd6e95acf/62fd5b4a8972f93d1e325243/Push.svg",
+    "description": "Teams battle to take control of a robot and push it toward the enemy base.",
+    "screenshot": "https://blz-contentstack-images.akamaized.net/v3/assets/blt9c12f249ac15c7ec/blt93eefb6e91347639/62fc2d9eda42240856c1459c/Toronto_Push.jpg"
+  },
+...
+]
+```
+
+### maps
+
+```https://overpi.albinus.gay/maps```
+
+```json
+[
+  {
+    "name": "Hanamura",
+    "screenshot": "https://overfast-api.tekrop.fr/static/maps/hanamura.jpg",
+    "gamemodes": [
+      "assault"
+    ],
+    "location": "Tokyo, Japan",
+    "country_code": "JP"
+  },
+...
+]
+```
+
 ### player search
 
 ```https://overpi.albinus.gay/player/search?n=name```
