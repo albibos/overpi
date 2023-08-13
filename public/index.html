@@ -3,18 +3,370 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/css/index.css">
+  <link rel="stylesheet" href="/css/docs.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@800&family=Cabin:wght@500&family=Montserrat:wght@600&family=Noto+Sans&family=Poppins&family=Roboto:wght@500&family=Space+Grotesk:wght@700&family=Varela+Round&display=swap" rel="stylesheet">
-  <title>overpi api showcase</title>
+  <title>overpi api docs</title>
 </head>
 <body>
-  
-  <main>
-    <div class="grid-container" id="heroesGrid"></div>
-  </main>
-  
-  <script src="/js/main.js"></script>
+  <div class="container">
+    <header>
+      <h1>Overpi: API Documentation</h1>
+    </header>
+    
+    <section id="heroes">
+      <h2>All Heroes Basic Data</h2>
+      <br>
+      <p>Get basic data on all heroes</p>
+      <br>
+      <p>Endpoint: <code> https://overpi.albinus.gay/heroes</code></p>
+      <br>
+      <p>Sample Response:</p>
+      <pre><code>
+[
+  {
+    "heroName": "Illari",
+    "role": "support",
+    "heroKey": "illari",
+    "heroImage": "https://d15f34w2p8l1cc.cloudfront.net/overwatch/5ea986038f9d307bd4613d5e6f2c4c8e7f15f30ceeeabbdd7a06637a38f17e1f.png"
+  },
+  {
+    "heroName": "Ana",
+    "role": "support",
+    "heroKey": "ana",
+    "heroImage": "https://d15f34w2p8l1cc.cloudfront.net/overwatch/3429c394716364bbef802180e9763d04812757c205e1b4568bc321772096ed86.png"
+  },
+  ...
+]
+      </code></pre>
+    </section>
+
+   <section id="heroes">
+      <h2>Specific Hero Data</h2>
+      <br>
+      <p>Get specific data on heroes (location, abilities, story, etc)</p>
+      <br>
+      <p>Endpoint: <code> https://overpi.albinus.gay/hero?n=heroKey</code></p>
+      <br>
+      <p>Sample Response:</p>
+      <pre><code>
+{
+  "name": "Ana",
+  "description": "One of the founding members of Overwatch, Ana uses her skills and expertise to defend her home and the people she cares for.",
+  "portrait": "https://d15f34w2p8l1cc.cloudfront.net/overwatch/3429c394716364bbef802180e9763d04812757c205e1b4568bc321772096ed86.png",
+  "role": "support",
+  "location": "Cairo, Egypt",
+  "hitpoints": {
+    "health": 200,
+    "shields": 0,
+    "armor": 0,
+    "total": 200
+  },
+// there is too much data, and it will make this section go on forever, so i cut it down to the first half
+      </code></pre>
+    </section>
+    
+    <!-- sep -->
+    
+    <section id="heroes">
+      <h2>Gamemodes</h2>
+      <br>
+      <p>Get data on all gamemodes</p>
+      <br>
+      <p>Endpoint: <code> https://overpi.albinus.gay/gamemodes</code></p>
+      <br>
+      <p>Sample Response:</p>
+      <pre><code>
+[
+  {
+    "key": "push",
+    "name": "Push",
+    "icon": "https://blz-contentstack-images.akamaized.net/v3/assets/blt9c12f249ac15c7ec/blt054b513cd6e95acf/62fd5b4a8972f93d1e325243/Push.svg",
+    "description": "Teams battle to take control of a robot and push it toward the enemy base.",
+    "screenshot": "https://blz-contentstack-images.akamaized.net/v3/assets/blt9c12f249ac15c7ec/blt93eefb6e91347639/62fc2d9eda42240856c1459c/Toronto_Push.jpg"
+  },
+...
+]
+      </code></pre>
+    </section>
+    
+    <!-- sep -->
+    
+    <section id="heroes">
+      <h2>Maps</h2>
+      <br>
+      <p>Get data on all maps</p>
+      <br>
+      <p>Endpoint: <code> https://overpi.albinus.gay/maps</code></p>
+      <br>
+      <p>Sample Response:</p>
+      <pre><code>
+[
+  {
+    "name": "Hanamura",
+    "screenshot": "https://overfast-api.tekrop.fr/static/maps/hanamura.jpg",
+    "gamemodes": [
+      "assault"
+    ],
+    "location": "Tokyo, Japan",
+    "country_code": "JP"
+  },
+...
+]
+      </code></pre>
+    </section>
+
+ <!-- sep -->
+
+    <section id="heroes">
+      <h2>Player Search</h2>
+      <br>
+      <p>Get player search results based on a query</p>
+      <br>
+      <p>Endpoint: <code> https://overpi.albinus.gay/player/search?n=</code></p>
+      <br>
+      <p>Sample Response:</p>
+      <pre><code>
+{
+  "total": 1900,
+  "results": [
+    {
+      "player_id": "AdVentureR-2195",
+      "name": "AdVentureR#2195",
+      "privacy": "public",
+      "career_url": "https://overfast-api.tekrop.fr/players/AdVentureR-2195"
+    },
+    {
+      "player_id": "Adventurer-110149381",
+      "name": "Adventurer#110149381",
+      "privacy": "private",
+      "career_url": "https://overfast-api.tekrop.fr/players/Adventurer-110149381"
+    },
+    {
+      "player_id": "Adventurer-110229487",
+      "name": "Adventurer#110229487",
+      "privacy": "private",
+      "career_url": "https://overfast-api.tekrop.fr/players/Adventurer-110229487"
+    },
+  // ...
+      </code></pre>
+    </section>
+
+
+    <section id="heroes">
+      <h2>Player Profile Summary</h2>
+      <br>
+      <p>Get a summary of a player's profile stats</p>
+      <br>
+      <p>Endpoint: <code> https://overpi.albinus.gay/player/summary?b=player-id</code></p>
+      <br>
+      <p>Sample Response:</p>
+{
+  "username": "AdVentureR",
+  "avatar": "https://d15f34w2p8l1cc.cloudfront.net/overwatch/21b9e01301442344ccf132814d3e07d3e5e84d55f7f36e5bdf53dea4a004e7f0.png",
+  "namecard": null,
+  "title": null,
+  "endorsement": {
+    "level": 3,
+    "frame": "https://static.playoverwatch.com/img/pages/career/icons/endorsement/3-8ccb5f0aef.svg#icon"
+  },
+// ...
+      </code></pre>
+    </section>
+
+
+    <section id="heroes">
+      <h2>Hero Patch Notes</h2>
+      <br>
+      <p>Get data of all hero patch notes</p>
+      <br>
+      <p>Endpoint: <code> https://overpi.albinus.gay/hero-updates</code></p>
+      <br>
+      <p>Sample Response:</p>
+      <pre><code>
+[
+  {
+    "heroName": "Illari",
+    "devComment": "",
+    "abilityUpdates": [
+      {
+        "abilityName": "Solar Rifle (Primary Fire)",
+        "detailList": [
+          "Long-range auto-charging rifle."
+        ]
+      },
+      {
+        "abilityName": "Solar Rifle (Secondary Fire)",
+        "detailList": [
+          "Medium-range healing beam that consumes solar energy."
+        ]
+      },
+      {
+        "abilityName": "Outburst (Ability 1)",
+        "detailList": [
+          "Launches you in the direction you are moving, knocking back enemies. Hold jump to go higher."
+        ]
+      },
+      {
+        "abilityName": "Healing Pylon (Ability 2)",
+        "detailList": [
+          "Deploy a pylon that heals allies."
+        ]
+      },
+      {
+        "abilityName": "Captive Sun (Ultimate)",
+        "detailList": [
+          "Fire an explosive ball of solar energy. Enemies hit are slowed and\nexplode after taking significant damage."
+        ]
+      }
+    ]
+  },
+// ...        
+      </code></pre>
+    </section>
+
+    <section id="heroes">
+      <h2>Bug Fixes</h2>
+      <br>
+      <p>Get data on all bug fixes</p>
+      <br>
+      <p>Endpoint: <code> https://overpi.albinus.gay/bug-fixes</code></p>
+      <br>
+      <p>Sample Response:</p>
+      <pre><code>
+[
+  {
+    "sectionTitle": "Lighting for Season 6",
+    "updates": [
+      {
+        "p": "Push",
+        "li": [
+          "New Queen Street – Dawn",
+          "Colosseo - Morning",
+          "Esperança – Morning"
+        ]
+      },
+      {
+        "p": "Hybrid",
+        "li": [
+          "Blizzard World – Night (New)",
+          "Eichenwalde – Morning",
+          "Hollywood – Night",
+          "King’s Row -- Night",
+          "Midtown -- Morning",
+          "Numbani -- Morning",
+          "Paraíso -- Evening (New)"
+        ]
+      },
+// ...        
+      </code></pre>
+    </section>
+
+
+    <section id="heroes">
+      <h2>Overwatch Screenshots</h2>
+      <br>
+      <p>Get an array of all screenshots sorted by heroes/maps</p>
+      <br>
+      <p>Endpoint: <code> https://overpi.albinus.gay/media/screenshots</code></p>
+      <br>
+      <p>Sample Response:</p>
+      <pre><code>
+{
+  "Sojourn": [
+    "https://images.blz-contentstack.com/v3/assets/blt2477dcaf4ebd440c/bltd45cca5857c5cc5a/62298aebe47e3d2eff2101c6/sojourn_screenshot_02.png?auto=webp",
+    "https://images.blz-contentstack.com/v3/assets/blt2477dcaf4ebd440c/bltd0ac787a78dfa2f5/62298aeb04503350d255bce4/sojourn_screenshot_01.png?auto=webp"
+  ],
+  "Echo": [
+    "https://images.blz-contentstack.com/v3/assets/blt2477dcaf4ebd440c/blt806f229382fc0360/5e84e905297b4d1b5ff03813/echo-screenshot-005.jpg?auto=webp",
+    "https://images.blz-contentstack.com/v3/assets/blt2477dcaf4ebd440c/bltd4fa3fa40da5d0e3/5e84e9058d83401be1197494/echo-screenshot-004.jpg?auto=webp",
+    "https://images.blz-contentstack.com/v3/assets/blt2477dcaf4ebd440c/blt2f5482b9f5e67027/5e6fc2cf8d83401be1196c73/echo-screenshot-001.jpg?auto=webp",
+    "https://images.blz-contentstack.com/v3/assets/blt2477dcaf4ebd440c/bltc747346156082d56/5e6fc2cf8902221b5e1ddd8f/echo-screenshot-002.jpg?auto=webp",
+    "https://images.blz-contentstack.com/v3/assets/blt2477dcaf4ebd440c/bltd1e880b7590f9688/5e6fc2cf297b4d1b5ff03091/echo-screenshot-003.jpg?auto=webp"
+  ],
+// ...
+      </code></pre>
+    </section>
+
+    <section id="heroes">
+      <h2>Hero Artworks</h2>
+      <br>
+      <p>Get an array of all hero artworks/concepts</p>
+      <br>
+      <p>Endpoint: <code> https://overpi.albinus.gay/media/artworks</code></p>
+      <br>
+      <p>Sample Response:</p>
+      <pre><code>
+{
+  "Echo": [
+    "https://images.blz-contentstack.com/v3/assets/blt2477dcaf4ebd440c/blt31a6a0eefef5ee85/5e6fc267b6788f72b89e9c4c/echo-concept.jpg?auto=webp"
+  ],
+  "Sigma": [
+    "https://images.blz-contentstack.com/v3/assets/blt2477dcaf4ebd440c/blt65e3918120aa6440/5d5ec75fa909ec1ccfcfa73c/sigma-concept.jpg?auto=webp"
+  ],
+ // ...        
+      </code></pre>
+    </section>
+
+
+    <section id="heroes">
+      <h2>Battlepass</h2>
+      <br>
+      <p>Get data on the free and premium battlepass (and any displayed offers)</p>
+      <br>
+      <p>Endpoint: <code> https://overpi.albinus.gay/battlepass</code></p>
+      <br>
+      <p>Sample Response:</p>
+      <pre><code>
+{
+  "freeBattlePass": [
+    "2 Epic skins",
+    "2 Weapon Charms",
+    "1 Highlight Intro",
+    "2 Emotes",
+    "4 Voice Lines ",
+    "Prestige tier titles",
+    "1500 Credits ",
+    "Over 15+ additional rewards"
+  ],
+  "premiumBattlePass": [
+    "Mythic A-7000 Wargod Ana Skin",
+    "20% XP Battle Pass boost",
+    "5 Legendary skins and 7 Epic skins",
+    "2 Highlight Intros",
+    "3 Weapon Charms",
+    "3 Emotes",
+    "5 Victory Poses",
+    "10 Voice Lines",
+    "500 additional credits",
+    "Over 20+ additional rewards"
+  ]
+}        
+      </code></pre>
+    </section>
+
+
+    <section id="heroes">
+      <h2>Roles</h2>
+      <br>
+      <p>Get data on all roles</p>
+      <br>
+      <p>Endpoint: <code> https://overpi.albinus.gay/roles</code></p>
+      <br>
+      <p>Sample Response:</p>
+      <pre><code>
+[
+  {
+    "key": "tank",
+    "name": "Tank",
+    "icon": "https://blz-contentstack-images.akamaized.net/v3/assets/blt9c12f249ac15c7ec/blt0f8b4fa502f0ea53/62ea8957ed429710b3d9b0b0/Tank.svg",
+    "description": "Tank heroes soak up damage and shatter fortified positions, like closely grouped enemies and narrow chokepoints. If you’re a tank, you lead the charge."
+  },
+ ...
+]
+      </code></pre>
+    </section>
+  </div>
 </body>
 </html>

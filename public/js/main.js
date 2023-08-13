@@ -34,7 +34,7 @@ function createHeroElement(hero) {
 
   heroElement.addEventListener("click", () => {
     const heroKey = hero.heroKey;
-    window.location.href = `/hero.html?n=${heroKey}`;
+    window.location.href = `/showcase/hero?n=${heroKey}`;
 });
 
   return heroElement;

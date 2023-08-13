@@ -12,6 +12,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cors());
 
+app.get('/showcase/heroes', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/overview.html'));
+});
+
+app.get('/showcase/hero', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/hero.html'));
+});
+
+app.get('/showcase/media', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/media.html'));
+});
+
 app.get('/heroes/:query?', async (req, res) => {
   try {
     const url = 'https://overwatch.blizzard.com/en-us/heroes/';
@@ -83,6 +95,18 @@ app.get('/maps', async (req, res) => {
     const apiUrl = `${baseUrl}${gamemodeQuery}`;
 
     const response = await axios.get(apiUrl);
+
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching data from the API.' });
+  }
+});
+
+app.get('/roles', async (req, res) => {
+  try {
+    const baseUrl = 'https://overfast-api.tekrop.fr/roles';
+
+    const response = await axios.get(baseUrl);
 
     res.json(response.data);
   } catch (error) {
@@ -258,14 +282,13 @@ app.get('/battlepass', async (req, res) => {
     const premiumBattlePassItems = $('blz-card[blz-modal-trigger="battle-pass-modal-1"] div[slot="description"] li');
     const premiumBattlePass = premiumBattlePassItems.map((index, item) => $(item).text()).get();
 
-    const seasonHeader = {
-      heading: $('blz-header[slot="header"] h1').text()
-    };
+    const invasionBundleItems = $('blz-card[blz-modal-trigger="invasion-modal-1"] div[slot="description"] li');
+    const invasionBundle = invasionBundleItems.map((index, item) => $(item).text()).get();
 
     const seasonData = {
-      seasonHeader,
       freeBattlePass,
       premiumBattlePass,
+      invasionBundle
     };
 
     res.json(seasonData);
@@ -414,6 +437,31 @@ app.get('/forums/bug-reports/', async (req, res) => {
     res.json({ latestPosts });
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while scraping forum data' });
+  }
+});
+
+app.get('/owl', async (req, res) => {
+  try {
+    const response = await axios.get('https://www.overwatchleague.com/en-us/');
+    const html = response.data;
+
+    const $ = cheerio.load(html);
+
+    const imgSrc = $('timeline-center-image picture img').attr('src');
+
+    const upcomingLabel = $('upcoming-highlight highlight-label').text();
+    const upcomingValue = $('upcoming-highlight highlight-value').text();
+
+    res.json({
+      imgSrc,
+      upcoming: {
+        label: upcomingLabel,
+        value: upcomingValue,
+      },
+    });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'An error occurred while scraping data.' });
   }
 });
 
