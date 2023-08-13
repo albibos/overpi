@@ -65,6 +65,31 @@ app.get('/hero', async (req, res) => {
   }
 });
 
+app.get('/gamemodes', async (req, res) => {
+  try {
+    const apiUrl = 'https://overfast-api.tekrop.fr/gamemodes';
+    const response = await axios.get(apiUrl);
+
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching data from the API.' });
+  }
+});
+
+app.get('/maps', async (req, res) => {
+  try {
+    const baseUrl = 'https://overfast-api.tekrop.fr/maps';
+    const gamemodeQuery = req.query.gm ? `?gamemode=${req.query.gm}` : '';
+    const apiUrl = `${baseUrl}${gamemodeQuery}`;
+
+    const response = await axios.get(apiUrl);
+
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching data from the API.' });
+  }
+});
+
 app.get('/player/search', async (req, res) => {
   const { n } = req.query;
 
@@ -391,7 +416,6 @@ app.get('/forums/bug-reports/', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while scraping forum data' });
   }
 });
-
 
 app.listen(port, () => {
   console.log(`owinsights is running on port ${port}`);
