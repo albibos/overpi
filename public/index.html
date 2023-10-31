@@ -162,9 +162,10 @@
       <br>
       <p>Get a summary of a player's profile stats</p>
       <br>
-      <p>Endpoint: <code> https://overpi.albinus.gay/player/summary?b=player-id</code></p>
+      <p>Endpoint: <code> https://overpi.albinus.gay/player/player-id</code></p>
       <br>
       <p>Sample Response:</p>
+       <pre><code>
 {
   "username": "AdVentureR",
   "avatar": "https://d15f34w2p8l1cc.cloudfront.net/overwatch/21b9e01301442344ccf132814d3e07d3e5e84d55f7f36e5bdf53dea4a004e7f0.png",
@@ -371,7 +372,52 @@
       </code></pre>
     </section>
 
+ <section id="heroes">
+      <h2>Blogs</h2>
+      <br>
+      <p>Scrape blog info and content. Get the id from the numbers in a blog url like: https://overwatch.blizzard.com/en-us/news/23989473/overwatch-2-invasion-is-here-with-new-adventures-a-new-hero-and-new-ways-to-play/</p>
+      <br>
+      <p>Endpoint: <code> https://overpi.albinus.gay/blogs/id</code></p>
+      <br>
+      <p>Sample Response:</p>
+      <pre><code>
+{
+  "blogTitle": "Answer The Engima’s Call and Fight the Null Sector Invasion",
+  "authorName": "Blizzard Entertainment",
+  "publishDate": "August 4, 2023",
+  "blogImage": "https://bnetcmsus-a.akamaihd.net/cms/blog_header/p6/P6PDOLSNA5LH1691167402622.jpeg",
+  "blogContent": "Heroes, the world is under attack, and it’s up to you to stop the invading forces of Null Sector. The enigma, John Cena has broken into community livestreams, asking all of us to answer the call and prepare to fight the invasion in Overwatch 2.\n\n\n\n\n\n\nWith the cities of Rio de Janeiro, Toronto, and Gothenburg under siege, it will be up to you to save the world. Dive into Invasion Story Missions featuring many of your favorite Overwatch 2 heroes and all-new challenging enemies. Will you be able to stop the forces of the Null Sector?\n\n\n\nOn August 10, answer our enigma, John Cena's call with the Overwatch 2 Ultimate Invasion Bundle featuring permanent access to the Invasion Story Missions, the Invasion Premium Battle Pass featuring over 80 tiers of cosmetics, including an all-new Mythic skin for Ana, 20 Battle Pass Tier Skips, 2,000 Overwatch Coins, and two exclusive Legendary Null Sector themed skins for Cassidy and Kiriko.\n\n\n\nThe world is counting on you. Starting on August 10, share your most heroic moment from Invasion Story Missions on social with #OverwatchInvasion, and you could be immortalized with a hero portrait by an Overwatch 2 artist.\n\n\n\nOverwatch 2: Invasion launches on all major platforms on August 10. Click here to learn more about Overwatch 2 today!\n \n\n\n"
+}
+      </code></pre>
+    </section>
 
+     <section id="heroes">
+      <h2>Highlights</h2>
+      <br>
+      <p>Get season highlight data</p>
+      <br>
+      <p>Endpoint: <code> https://overpi.albinus.gay/highlights</code></p>
+      <br>
+      <p>Sample Response:</p>
+      <pre><code>
+[
+  {
+    "imageSrc": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt06b0124c7ccffe70/64c958ce3931109843e8f7b7/Story_Mission.jpg?format=webply&quality=90",
+    "availability": "available all season",
+    "heading": "INVASION STORY MISSIONS",
+    "description": "Team up with your friends as you play in three challenging co-op missions.  Purchase the Overwatch 2: Invasion Bundle to get permanent access to the Invasion Story Missions and unlock Sojourn as a playable hero along with the new Vigilante Legendary skin."
+  },
+  {
+    "imageSrc": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt3bd726edb45955cb/64c958ce67e57a31d4cec544/Underworld.jpg?format=webply&quality=90",
+    "availability": "available all season",
+    "heading": "KING'S ROW: UNDERWORLD",
+    "description": "We're kicking off the season with a free-to-play Co-op event! Race to the rescue to save the Omnic Underworld from Null Sector attack, and challenge yourself to new ways to play every week during the event."
+  },
+...
+]
+      </code></pre>
+    </section>
+    
     <section id="heroes">
       <h2>Showcases</h2>
       <br>

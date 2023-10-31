@@ -16,6 +16,14 @@ app.get('/showcase/heroes', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/overview.html'));
 });
 
+app.get('/search', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/search.html'));
+});
+
+app.get('/results', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/results.html'));
+});
+
 app.get('/showcase/hero', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/hero.html'));
 });
@@ -115,22 +123,36 @@ app.get('/roles', async (req, res) => {
 });
 
 app.get('/player/search', async (req, res) => {
-  const { n } = req.query;
+  const n = req.query.q;
+  const limit = req.query.limit || null;
 
   if (!n) {
     return res.status(400).json({ error: 'Player name is required' });
   }
 
   try {
-    const playerSearchResult = await Overwatch.searchPlayers({ name: n.toString() });
+    const playerSearchResult = await Overwatch.searchPlayers({ name: n.toString(), limit: limit });
+
+    const modifiedResults = playerSearchResult.results.map(result => {
+      const modifiedUrl = result.career_url.replace('https://overfast-api.tekrop.fr', 'https://overpi.albinus.gay');
+      return {
+        player_id: result.player_id,
+        name: result.name,
+        privacy: result.privacy,
+        url: modifiedUrl
+      };
+    });
+
+    playerSearchResult.results = modifiedResults;
+
     res.json(playerSearchResult);
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while searching for players' });
   }
 });
 
-app.get('/player/summary', async (req, res) => {
-  const { b } = req.query;
+app.get('/players/:b', async (req, res) => {
+  const { b } = req.params;
 
   if (!b) {
     return res.status(400).json({ error: 'Battletag is required' });
@@ -464,6 +486,40 @@ app.get('/owl', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while scraping data.' });
   }
 });
+
+app.get('/blogs', async (req, res) => {
+  try {
+    const response = await axios.get('https://overwatch.blizzard.com/en-us/news/');
+    const html = response.data;
+    const $ = cheerio.load(html);
+
+    const scrapedData = [];
+
+    $('blz-card[slot="gallery-items"]').each((index, element) => {
+      const title = $(element).find('h4[slot="heading"]').text();
+      const image = $(element).find('blz-image[slot="image"]').attr('src');
+      const url = $(element).attr('href');
+      const date = $(element).find('div.footer-text').text().trim();
+
+      const number = url.match(/\/news\/(\d+)/)[1];
+
+      const constructedURL = `https://overpi.albinus.gay/blogs/${number}`;
+
+      scrapedData.push({
+        title,
+        image,
+        date,
+        url: constructedURL,
+      });
+    });
+
+    res.json(scrapedData);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while scraping data.' });
+  }
+});
+
+
 
 app.listen(port, () => {
   console.log(`owinsights is running on port ${port}`);

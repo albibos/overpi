@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overpi: Search Results</title>
+    <link rel="stylesheet" href="css/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@800&family=Cabin:wght@500&family=Montserrat:wght@600&family=Noto+Sans&family=Poppins&family=Roboto:wght@500&family=Space+Grotesk:wght@700&family=Varela+Round&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <h1>Overpi</h1>
+    <div class="search-bar">
+      <input
+        id="queryInput"
+        type="text"
+        class="input-box"
+        placeholder="Search more Names"
+      />
+    </div>
+  </header>
+    <div class="header">
+        <h1 id="queryResultsCount"></h1>
+    </div>
+    <div class="results-grid" id="resultsGrid">
+    </div>
+    <script src="js/players.js"></script>
+    <script>
+      function redirectToSearch() {
+        const query = document.getElementById("queryInput").value;
+        if (query.trim() !== "") {
+          window.location.href = `?q=${query}`;
+        }
+      }
+
+      document
+        .getElementById("queryInput")
+        .addEventListener("keydown", function (event) {
+          if (event.key === "Enter") {
+            redirectToSearch();
+          }
+        });
+    </script>
+</body>
+    </script>
+</body>
+</html>
