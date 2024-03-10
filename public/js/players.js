@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const queryParams = new URLSearchParams(window.location.search);
   const query = queryParams.get("q");
 
-    fetch(`https://overpi.albinus.gay/player/search?q=${query}`)
+    fetch(`https://overpi.albinus.gay/player/search?q=${query}&limit=500`)
         .then(response => response.json())
         .then(data => {
             const resultsGrid = document.getElementById("resultsGrid");

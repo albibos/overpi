@@ -29,6 +29,8 @@ h1 {
 .player {
   background-color: #2a2a2a;
   box-shadow: 0px 3px 5px #000;
+  border-radius: 10px;
+  outline: 1px solid #ff9900;
   transition: all 0.4s ease-in-out;
 }
 
